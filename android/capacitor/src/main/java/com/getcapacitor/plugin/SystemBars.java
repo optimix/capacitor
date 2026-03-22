@@ -26,6 +26,9 @@ import java.util.Locale;
 @CapacitorPlugin
 public class SystemBars extends Plugin {
 
+    static final String RESIZE_NONE = "none";
+    static final String RESIZE_ON_KEYBOARD = "keyboard";
+
     static final String STYLE_LIGHT = "LIGHT";
     static final String STYLE_DARK = "DARK";
     static final String STYLE_DEFAULT = "DEFAULT";
@@ -56,6 +59,7 @@ public class SystemBars extends Plugin {
     private boolean insetHandlingEnabled = true;
     private boolean hasViewportCover = false;
     private boolean viewportCoverLoaded = false;
+    private String resizeWebViewMode = RESIZE_ON_KEYBOARD;
 
     private String currentStyle = STYLE_DEFAULT;
 
@@ -139,6 +143,16 @@ public class SystemBars extends Plugin {
     }
 
     @PluginMethod
+    public void setResizeWebViewMode(final PluginCall call) {
+        String mode = call.getString("mode", "");
+
+        getBridge().executeOnMainThread(() -> {
+            resizeWebViewMode = mode;
+            call.resolve();
+        });
+    }
+
+    @PluginMethod
     public void setAnimation(final PluginCall call) {
         call.resolve();
     }
@@ -184,7 +198,9 @@ public class SystemBars extends Plugin {
 
             Insets systemBarsInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
             Insets imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime());
-            boolean keyboardVisible = insets.isVisible(WindowInsetsCompat.Type.ime());
+
+            boolean keyboardVisible = insets.isVisible(WindowInsetsCompat.Type.ime()) &&
+                    RESIZE_ON_KEYBOARD.equals(resizeWebViewMode);
 
             if (shouldPassthroughInsets) {
                 // We need to correct for a possible shown IME

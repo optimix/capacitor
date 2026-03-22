@@ -8,7 +8,8 @@ public class CAPSystemBarsPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "setStyle", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "setAnimation", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "show", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "hide", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "hide", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "setResizeWebViewMode", returnType: CAPPluginReturnPromise),
     ]
 
     public private(set) var hideHomeIndicator: Bool = false
@@ -68,6 +69,10 @@ public class CAPSystemBarsPlugin: CAPPlugin, CAPBridgedPlugin {
         let animation = call.getString("animation", "FADE")
         setAnimation(animation: animation)
 
+        call.resolve()
+    }
+
+    @objc func setResizeWebViewMode(_ call: CAPPluginCall) {
         call.resolve()
     }
 
