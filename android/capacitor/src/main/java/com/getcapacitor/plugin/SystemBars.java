@@ -55,6 +55,7 @@ public class SystemBars extends Plugin {
 
     private boolean insetHandlingEnabled = true;
     private boolean hasViewportCover = false;
+    private boolean viewportCoverLoaded = false;
 
     private String currentStyle = STYLE_DEFAULT;
 
@@ -147,6 +148,7 @@ public class SystemBars extends Plugin {
         getActivity().runOnUiThread(() -> {
             this.bridge.getWebView().evaluateJavascript(viewportMetaJSFunction, (res) -> {
                 hasViewportCover = res.equals("true");
+                viewportCoverLoaded = true;
 
                 getBridge().getWebView().requestApplyInsets();
             });
@@ -174,6 +176,10 @@ public class SystemBars extends Plugin {
 
     private void initWindowInsetsListener() {
         ViewCompat.setOnApplyWindowInsetsListener((View) getBridge().getWebView().getParent(), (v, insets) -> {
+            if (!viewportCoverLoaded) {
+                return insets;
+            }
+
             boolean shouldPassthroughInsets = getWebViewMajorVersion() >= WEBVIEW_VERSION_WITH_SAFE_AREA_FIX && hasViewportCover;
 
             Insets systemBarsInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
