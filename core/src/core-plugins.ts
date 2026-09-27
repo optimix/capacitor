@@ -526,6 +526,26 @@ export enum SystemBarsStyle {
 }
 
 /**
+ * Available resize web view mode
+ */
+export enum ResizeWebViewMode {
+
+  /**
+   * No resize of the Web View
+   *
+   * @since 8.3.0
+   */
+  None = 'none',
+
+  /**
+   * Resize of the Web View when the keyboard is showing
+   *
+   * @since 8.3.0
+   */
+  Keyboard = 'keyboard',
+}
+
+/**
  * Available status bar animations.  iOS only.
  */
 export type SystemBarsAnimation = 'FADE' | 'NONE';
@@ -604,6 +624,19 @@ export interface SystemBarsAnimationOptions {
   animation: SystemBarsAnimation;
 }
 
+export interface ResizeWebViewOptions {
+  /**
+   * The resize Web View options.
+   *
+   * This option is only supported on Android.
+   *
+   * @default 'keyboard'
+   *
+   * @since 8.3.0
+   */
+  mode: ResizeWebViewMode;
+}
+
 export interface SystemBarsPlugin {
   /**
    * Set the current style of the system bars.
@@ -634,6 +667,15 @@ export interface SystemBarsPlugin {
    * @since 8.0.0
    */
   setAnimation(options: SystemBarsAnimationOptions): Promise<void>;
+
+  /**
+   * Set the resize web view mode.
+   *
+   * Only available on Android.
+   *
+   * @since 8.3.0
+   */
+  setResizeWebViewMode(options: ResizeWebViewOptions): Promise<void>;
 }
 
 export class SystemBarsPluginWeb extends WebPlugin implements SystemBarsPlugin {
@@ -650,6 +692,10 @@ export class SystemBarsPluginWeb extends WebPlugin implements SystemBarsPlugin {
   }
 
   async hide(): Promise<void> {
+    this.unavailable('not available for web');
+  }
+
+  async setResizeWebViewMode(): Promise<void> {
     this.unavailable('not available for web');
   }
 }

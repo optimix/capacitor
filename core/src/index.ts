@@ -22,6 +22,7 @@ export {
   SystemBarType,
   SystemBarsStyle,
   SystemBarsAnimation,
+  ResizeWebViewMode,
   CapacitorCookies,
   CapacitorHttp,
   WebView,
