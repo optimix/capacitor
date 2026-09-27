@@ -60,6 +60,13 @@ const setStatusBarAnimation = async () => {
   await SystemBars.setAnimation({ animation: "NONE" });
 }
 
+// Do not resize the Web View when the keyboard shows, only on Android
+const setNoResizeOfTheWebView = async () => {
+    await SystemBars.setResizeWindowMode({
+        mode: ResizeWebViewMode.None
+    });
+}
+
 ````
 
 ## Configuration
@@ -116,6 +123,7 @@ export default config;
 * [`show(...)`](#show)
 * [`hide(...)`](#hide)
 * [`setAnimation(...)`](#setanimation)
+* [`setResizeWebViewMode(...)`](#setresizewebviewmode)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 * [Enums](#enums)
@@ -195,6 +203,25 @@ Only available on iOS.
 --------------------
 
 
+### setResizeWebViewMode(...)
+
+```typescript
+setResizeWebViewMode(options: ResizeWebViewOptions) => Promise<void>
+```
+
+Set the resize web view mode.
+
+Only available on Android.
+
+| Param         | Type                                                                  |
+| ------------- | --------------------------------------------------------------------- |
+| **`options`** | <code><a href="#resizewebviewoptions">ResizeWebViewOptions</a></code> |
+
+**Since:** 8.3.0
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -219,6 +246,13 @@ Only available on iOS.
 | Prop            | Type                                                                | Description                                                                                         | Default             | Since |
 | --------------- | ------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | ------------------- | ----- |
 | **`animation`** | <code><a href="#systembarsanimation">SystemBarsAnimation</a></code> | The type of status bar animation used when showing or hiding. This option is only supported on iOS. | <code>'FADE'</code> | 8.0.0 |
+
+
+#### ResizeWebViewOptions
+
+| Prop       | Type                                                            | Description                                                            | Default                 | Since |
+| ---------- | --------------------------------------------------------------- | ---------------------------------------------------------------------- | ----------------------- | ----- |
+| **`mode`** | <code><a href="#resizewebviewmode">ResizeWebViewMode</a></code> | The resize Web View options. This option is only supported on Android. | <code>'keyboard'</code> | 8.3.0 |
 
 
 ### Type Aliases
@@ -249,5 +283,13 @@ Available status bar animations.  iOS only.
 | ------------------- | ---------------------------- | ------------------------------------------------------------------- | ----- |
 | **`StatusBar`**     | <code>'StatusBar'</code>     | The top status bar on both Android and iOS.                         | 8.0.0 |
 | **`NavigationBar`** | <code>'NavigationBar'</code> | The navigation bar (or gesture bar on iOS) on both Android and iOS. | 8.0.0 |
+
+
+#### ResizeWebViewMode
+
+| Members        | Value                   | Description                                         | Since |
+| -------------- | ----------------------- | --------------------------------------------------- | ----- |
+| **`None`**     | <code>'none'</code>     | No resize of the Web View                           | 8.3.0 |
+| **`Keyboard`** | <code>'keyboard'</code> | Resize of the Web View when the keyboard is showing | 8.3.0 |
 
 </docgen-api>
