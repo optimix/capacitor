@@ -59,6 +59,7 @@ public class SystemBars extends Plugin {
     private String insetsHandling = INSETS_HANDLING_CSS;
     private boolean hasViewportCover = false;
     private String resizeWebViewMode = RESIZE_ON_KEYBOARD;
+    private boolean viewportCoverLoaded = false;
 
     private String currentStatusBarStyle = STYLE_DEFAULT;
     private String currentGestureBarStyle = STYLE_DEFAULT;
@@ -99,6 +100,7 @@ public class SystemBars extends Plugin {
                     super.onPageCommitVisible(view, url);
                     bridge.getWebView().evaluateJavascript(viewportMetaJSFunction, (res) -> {
                         hasViewportCover = res.equals("true");
+                        viewportCoverLoaded = true;
 
                         // Request new execution tree of `setOnApplyWindowInsetsListener`
                         bridge.getWebView().requestApplyInsets();
@@ -205,6 +207,10 @@ public class SystemBars extends Plugin {
         View view = getActivity().getWindow().getDecorView();
 
         ViewCompat.setOnApplyWindowInsetsListener(view, (v, insets) -> {
+            if (!viewportCoverLoaded) {
+                return insets;
+            }
+
             boolean shouldPassthroughInsets = getWebViewMajorVersion() >= WEBVIEW_VERSION_WITH_SAFE_AREA_FIX && hasViewportCover;
 
             Insets systemBarsInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
